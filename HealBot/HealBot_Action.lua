@@ -1988,21 +1988,40 @@ local setDropdown=nil
 local partyNo=nil
 local sTar, sTrin1, sTrin2=0, 0, 0
 local curGUID=nil
+
 function HealBot_Action_SetButtonAttrib(button,bbutton,bkey,status,j)
  
-    if strlen(bkey)>1 then
-        HB_prefix = strlower(bkey).."-"
+    if strlen(bkey) > 1 then
+        HB_prefix = strlower(bkey) .. "-"
     else
-        HB_prefix = "";
+        HB_prefix = ""
     end
     
-    HB_combo_prefix = bkey..bbutton..HealBot_Config.CurrentSpec;
-    if status=="Enabled" then
-        sName, sTar, sTrin1, sTrin2 = HealBot_Action_AttribSpellPattern(HB_combo_prefix)
-    elseif status=="Disabled" then
-        sName, sTar, sTrin1, sTrin2 = HealBot_Action_AttribDisSpellPattern(HB_combo_prefix)
+    HB_combo_prefix = bkey .. bbutton .. HealBot_Config.CurrentSpec;
+    
+    -- Получаем информацию о заклинании
+    local input = HealBot_Action_AttribSpellPattern(HB_combo_prefix)
+    local isSpellID = tonumber(input)
+    local zaglushka = nil
+    
+    -- Определяем sTar, sTrin1 и sTrin2
+    if isSpellID then
+        sName = GetSpellInfo(isSpellID)
+        if status == "Enabled" then
+            zaglushka, sTar, sTrin1, sTrin2 = HealBot_Action_AttribSpellPattern(HB_combo_prefix)
+        elseif status == "Disabled" then
+            zaglushka, sTar, sTrin1, sTrin2 = HealBot_Action_AttribDisSpellPattern(HB_combo_prefix)
+        else
+            sName, sTar, sTrin1, sTrin2 = nil, 0, 0, 0
+        end
     else
-        sName=nil;
+        if status == "Enabled" then
+            sName, sTar, sTrin1, sTrin2 = HealBot_Action_AttribSpellPattern(HB_combo_prefix)
+        elseif status == "Disabled" then
+            sName, sTar, sTrin1, sTrin2 = HealBot_Action_AttribDisSpellPattern(HB_combo_prefix)
+        else
+            sName, sTar, sTrin1, sTrin2 = nil, 0, 0, 0
+        end
     end
     if sName then
         if strlower(sName)==strlower(HEALBOT_DISABLED_TARGET) then
@@ -2176,6 +2195,7 @@ function HealBot_Action_AlterSpell2Macro(spellName, spellTar, spellTrin1, spellT
     end
     return smName[combo..unit]
 end
+
 
 function HealBot_Action_hbmenuFrame_DropDown_Initialize(self,level)
     local info

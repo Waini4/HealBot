@@ -6233,7 +6233,7 @@ function HealBot_Update_Skins()
             if not Healbot_Config_Skins.CombatProtParty[Healbot_Config_Skins.Skins[x]] then Healbot_Config_Skins.CombatProtParty[Healbot_Config_Skins.Skins[x]] = 0 end
             if not Healbot_Config_Skins.CombatProtRaid[Healbot_Config_Skins.Skins[x]] then Healbot_Config_Skins.CombatProtRaid[Healbot_Config_Skins.Skins[x]] = 0 end
 
-            if strsub(HEALBOT_VERSION, 1, 7) == "3.3.5.6.1" then
+            if strsub(HEALBOT_VERSION, 1, 7) == "3.3.5.7" then
                 if Healbot_Config_Skins.AggroAlertLevel[Healbot_Config_Skins.Skins[x]] == 4 then Healbot_Config_Skins.AggroAlertLevel[Healbot_Config_Skins.Skins[x]] = 3 end
             end
         end
